@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,6 +39,23 @@ namespace craftersmine.Valheim.WorldCleaner
                 timePassed += Time.deltaTime;
                 timePassedForMessage += Time.deltaTime;
             }
+
+
+            #if DEBUG
+            if (Input.GetKeyUp(ModConfig.Instance.ItemDataDumpKey.Value))
+            {
+                string dumpFile = Path.Combine(Mod.ModConfigFolder, "DroppedItemData.xml");
+                Chat.instance.SendText(Talker.Type.Shout, "[SERVER] " + " Developer initiated dropped items data dump, server might lag for a bit!");
+                Mod.Logger.LogWarning("Initiated dropped items data dump... Dumping to " + dumpFile);
+
+                using (FileStream fs = new FileStream(dumpFile, FileMode.Create))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(ItemDrop[]));
+                    ItemDrop[] drops = UnityEngine.Object.FindObjectsOfType<ItemDrop>();
+                    serializer.Serialize(fs, drops);
+                }
+            }
+            #endif
 
             if (ModConfig.Instance.ShowMessagesInChat.Value && (timePassedForMessage >
                                                                 ModConfig.Instance.IntervalSeconds.Value -
