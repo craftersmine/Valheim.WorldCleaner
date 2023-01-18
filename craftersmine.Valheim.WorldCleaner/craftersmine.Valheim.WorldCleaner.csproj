@@ -4,7 +4,7 @@
     <TargetFramework>net461</TargetFramework>
     <AssemblyName>craftersmine.Valheim.WorldCleaner</AssemblyName>
     <Description>Valheim World Cleaner</Description>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
