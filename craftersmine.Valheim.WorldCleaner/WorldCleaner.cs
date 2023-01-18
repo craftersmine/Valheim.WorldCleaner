@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -91,33 +91,31 @@ namespace craftersmine.Valheim.WorldCleaner
             timePassed = 0;
             countTime = false;
 
-            if (ZNet.instance.IsServer())
+            if (ZNet.instance.IsServer() && ModConfig.Instance.ShowMessagesInChat.Value)
+                Chat.instance.SendText(Talker.Type.Shout, "[SERVER] " + ModConfig.Instance.CleaningUndergoingChatMessage.Value);
+            ItemDrop[] drops = UnityEngine.Object.FindObjectsOfType<ItemDrop>();
+            totalItems = drops.Length;
+            Mod.Logger.LogInfo(string.Format("Found {0} items drops (including fish?) throughout whole Unity scene", totalItems));
+
+            foreach (ItemDrop drop in drops)
             {
-                if (ModConfig.Instance.ShowMessagesInChat.Value)
-                    Chat.instance.SendText(Talker.Type.Shout, "[SERVER] " + ModConfig.Instance.CleaningUndergoingChatMessage.Value);
-                ItemDrop[] drops = UnityEngine.Object.FindObjectsOfType<ItemDrop>();
-                totalItems = drops.Length;
-                Mod.Logger.LogInfo(string.Format("Found {0} items drops (including fish?) throughout whole Unity scene", totalItems));
-                foreach (ItemDrop drop in drops)
+                bool isFish = drop.GetComponent<Fish>() is not null;
+                if (!isFish)
                 {
-                    bool isFish = drop.GetComponent<Fish>() is not null;
-                    if (!isFish)
+                    ZNetView zNetView = drop.GetComponent<ZNetView>();
+                    if (zNetView is not null && zNetView.IsValid())
                     {
-                        ZNetView zNetView = drop.GetComponent<ZNetView>();
-                        if (zNetView is not null && zNetView.IsValid())
-                        {
-                            if (ModConfig.Instance.WhiteListedItemsIdsArray.Contains(zNetView.GetPrefabName()))
-                                continue;
-                            zNetView.Destroy();
-                            cleanedItems++;
-                        }
+                        if (ModConfig.Instance.WhiteListedItemsIdsArray.Contains(zNetView.GetPrefabName()))
+                            continue;
+                        zNetView.Destroy();
+                        cleanedItems++;
                     }
                 }
-                Mod.Logger.LogInfo(string.Format("World Cleaner removed {0}/{1} item drops!", cleanedItems, totalItems));
-                if (ModConfig.Instance.ShowMessagesInChat.Value)
-                    Chat.instance.SendText(Talker.Type.Shout, "[SERVER] " + string.Format(ModConfig.Instance.CleaningFinishedChatMessage.Value, cleanedItems, totalItems));
             }
-            
+            Mod.Logger.LogInfo(string.Format("World Cleaner removed {0}/{1} item drops!", cleanedItems, totalItems));
+            if (ZNet.instance.IsServer() && ModConfig.Instance.ShowMessagesInChat.Value)
+                Chat.instance.SendText(Talker.Type.Shout, "[SERVER] " + string.Format(ModConfig.Instance.CleaningFinishedChatMessage.Value, cleanedItems, totalItems));
+
             countTime = true;
         }
 
