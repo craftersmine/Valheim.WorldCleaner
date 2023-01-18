@@ -33,6 +33,9 @@ namespace craftersmine.Valheim.WorldCleaner
 
         public void Update()
         {
+            if (!ModConfig.Instance.EnableCleaning.Value)
+                return;
+
             if (!AllowCleaning)
                 return;
 
