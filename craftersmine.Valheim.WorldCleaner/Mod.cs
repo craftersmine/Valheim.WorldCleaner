@@ -1,10 +1,8 @@
-using System.IO;
+﻿using System.IO;
 using BepInEx;
 using BepInEx.Logging;
 using craftersmine.Valheim.WorldCleaner.Patches;
 using HarmonyLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace craftersmine.Valheim.WorldCleaner
 {
