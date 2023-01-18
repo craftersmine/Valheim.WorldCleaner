@@ -1,11 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
+
+using UnityEngine;
 
 namespace craftersmine.Valheim.WorldCleaner
 {
@@ -23,6 +26,7 @@ namespace craftersmine.Valheim.WorldCleaner
         public ConfigEntry<string> CleaningUndergoingChatMessage { get; private set; }
         public ConfigEntry<string> CleaningFinishedChatMessage { get; private set; }
         public ConfigEntry<KeyCode> ItemDataDumpKey { get; private set; }
+        public ConfigEntry<KeyCode> ForceCleanupKey { get; private set; }
 
         public string[] WhiteListedItemsIdsArray
         {
@@ -62,6 +66,10 @@ namespace craftersmine.Valheim.WorldCleaner
             Instance.ItemDataDumpKey = Instance._configFile.Bind<KeyCode>("Keys", nameof(ItemDataDumpKey), KeyCode.F11,
                 "Key for initiating current item drops data dump");   
 #endif
+
+            Instance.ForceCleanupKey =
+                Instance._configFile.Bind<KeyCode>("Keys", nameof(ForceCleanupKey), KeyCode.F12, "Key for initiating world force-cleanup");
+
             Instance.BeforeCleaningChatMessage = Instance._configFile.Bind<string>("Messages",
                 nameof(BeforeCleaningChatMessage), "World will be cleaned from dropped items in {0:F2} seconds!",
                 "Message that will be shown in chat before world cleaning");

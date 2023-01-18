@@ -42,6 +42,12 @@ namespace craftersmine.Valheim.WorldCleaner
                 timePassedForMessage += Time.deltaTime;
             }
 
+            if (Input.GetKeyUp(ModConfig.Instance.ForceCleanupKey.Value))
+            {
+                timePassed = ModConfig.Instance.IntervalSeconds.Value -
+                             ModConfig.Instance.BeforeCleaningMessageDelaySeconds.Value;
+                timePassedForMessage = timePassed;
+            }
 
             #if DEBUG
             if (Input.GetKeyUp(ModConfig.Instance.ItemDataDumpKey.Value))
