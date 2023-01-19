@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -88,13 +88,14 @@ namespace craftersmine.Valheim.WorldCleaner
                 if (!isFish)
                 {
                     ZNetView zNetView = drop.GetComponent<ZNetView>();
-                    if (zNetView is not null && zNetView.IsValid())
+                    if (zNetView is not null/* && zNetView.IsValid()*/)
                     {
                         if (ModConfig.Instance.WhiteListedItemsIdsArray.Contains(zNetView.GetPrefabName()))
                             continue;
                         zNetView.Destroy();
                         cleanedItems++;
                     }
+                    else UnityEngine.Object.Destroy(drop.gameObject);
                 }
             }
             Mod.Logger.LogInfo(string.Format("World Cleaner removed {0}/{1} item drops!", cleanedItems, totalItems));
