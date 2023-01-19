@@ -47,6 +47,7 @@ namespace craftersmine.Valheim.WorldCleaner
 
             if (Input.GetKeyUp(ModConfig.Instance.ForceCleanupKey.Value))
             {
+                Mod.Logger.LogWarning("Force-initiated world cleanup!");
                 timePassed = ModConfig.Instance.IntervalSeconds.Value -
                              ModConfig.Instance.BeforeCleaningMessageDelaySeconds.Value;
                 timePassedForMessage = timePassed;
